@@ -1,5 +1,56 @@
-
+<!DOCTYPE html>
 <html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - TKP 통합 단가표</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+    // 페이지가 로드되면 자동으로 실행됩니다.
+    window.addEventListener('load', () => {
+        // 서버의 /api/whoami 주소로 사용자 정보를 요청합니다.
+        fetch('/api/whoami')
+            .then(response => response.json()) // 받은 응답을 JSON 형태로 변환합니다.
+            .then(data => {
+                // 성공적으로 사용자 정보를 받으면...
+                if (data.loggedInUser) {
+                    // id가 'welcome-message'인 h2 태그를 찾습니다.
+                    const welcomeElement = document.getElementById('welcome-message');
+                    // 해당 태그의 내용을 환영 메시지로 변경합니다.
+                    welcomeElement.textContent = `${data.loggedInUser}님, 안녕하세요!`;
+                }
+            })
+            .catch(error => console.error('사용자 정보를 가져오는 데 실패했습니다:', error));
+    });
+</script>
+    <style>
+        /* 기존 index.html의 스타일을 그대로 가져옵니다 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #111827; /* bg-gray-900 */
+        }
+        .login-container {
+            background-color: #1f2937; /* calc-panel color */
+            border: 1px solid #374151;
+        }
+        .password-input {
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            color: #f9fafb;
+            -moz-appearance: textfield; /* Firefox */
+        }
+        .password-input:focus {
+           --tw-ring-color: #38bdf8;
+           border-color: #38bdf8;
+           outline: none;
+           box-shadow: 0 0 0 2px var(--tw-ring-color);
+        }
+    </style>
+</head>
+
+</html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -251,55 +302,7 @@
             box-shadow: 0 0 10px #38bdf8;
         }
         html, body {
-	.password-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-.password-modal-overlay.show {
-    opacity: 1;
-    pointer-events: auto;
-}
-.password-modal-content {
-    background-color: #1f2937; /* calc-panel color */
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    width: 100%;
-    max-width: 380px;
-    border: 1px solid #374151;
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-}
-.password-modal-overlay.show .password-modal-content {
-    transform: translateY(0);
-}
-.password-input {
-    background-color: #374151;
-    border: 1px solid #4b5563;
-    color: #f9fafb;
-    -moz-appearance: textfield; /* Firefox */
-}
-.password-input:focus {
-   --tw-ring-color: #38bdf8;
-   border-color: #38bdf8;
-   outline: none;
-   box-shadow: 0 0 0 2px var(--tw-ring-color);
-}
-.password-error-message {
-    min-height: 1.5rem; /* 24px */
-}		
-
-
-
-            min-height: 100dvh;
+	            min-height: 100dvh;
         }
 </style>
 </head>
@@ -319,13 +322,14 @@
         <button id="view-history-button" class="history-view-button">기록 보기</button>
     </div>
 
-	<div id="main-content" class="max-w-7xl mx-auto w-full" style="display: none;">    
+	<div id="main-content" class="max-w-7xl mx-auto w-full">    
  	<div id="selection-screen" class="w-full relative">
     <div class="watermark">한국도키멕 기술연구소</div>
     <div class="watermark-bottom">한국도키멕 기술연구소</div>
              <header class="mb-12 text-center">
-                <h1 class="text-4xl sm:text-5xl font-bold text-white">TKP 통합 단가표 2025.08.01</h1>
-		<p class="text-center text-gray-400 mb-8">2025.08 기준
+                <h1 class="text-4xl sm:text-5xl font-bold text-white">TKP 통합 단가표 2025.08월</h1>
+		<h2 id="welcome-message" class="text-2xl text-sky-400 mt-4 text-center"></h2>
+		<p class="text-center text-gray-400 mb-8">2025.08월 기준
                 <p class="text-gray-400 mt-4 text-lg">확인하고 싶은 품목을 선택하세요.</p>
 			<div class="mt-6">
             <button id="install-pwa-btn" class="hidden bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-lg">
@@ -390,8 +394,8 @@
                          <div class="watermark">한국도키멕 기술연구소</div>
                          <div class="p-4 sm:p-6 lg:p-8">
                             <h1 class="text-2xl sm:text-3xl font-bold text-center calc-header mb-2 pt-16">TKP 표준 실린더 단가표</h1>
-			    <p class="text-center text-gray-400 mb-8">2025.08 기준	
-                            <p class="text-center text-gray-400 mb-8">옵션을 선택하여 실시간으로 견적을 확인하세요.(기준일: 2025-08-01)</p>
+			    <p class="text-center text-gray-400 mb-8">2025.08월 
+                            <p class="text-center text-gray-400 mb-8">옵션을 선택하여 실시간으로 견적을 확인하세요.(기준일: 2025.08)</p>
 
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                                 <div class="calc-panel p-6 sm:p-8 rounded-2xl shadow-inner">
@@ -453,7 +457,7 @@
                                 </div>
                             </div>
                         </div>
-                        <footer class="text-center text-gray-500 mt-8 text-sm pb-8"><p>본 계산기는 제공된 가격표를 기준으로 한 예상 견적이며, 실제 금액과 차이가 있을 수 있습니다.</p><p>최종 가격은 별도 협의 후 결정됩니다. (2025.08 기준)</p></footer>
+                        <footer class="text-center text-gray-500 mt-8 text-sm pb-8"><p>본 계산기는 제공된 가격표를 기준으로 한 예상 견적이며, 실제 금액과 차이가 있을 수 있습니다.</p><p>최종 가격은 별도 협의 후 결정됩니다. 2025.08월 기준)</p></footer>
                         <div class="watermark-bottom">한국도키멕 기술연구소</div>
                     </div>
                 </div>
@@ -471,7 +475,7 @@
                         <div class="p-6 sm:p-8 lg:p-10">
                             <header class="text-center mb-8 pt-16">
                                 <h1 class="text-2xl sm:text-3xl font-bold calc-header">TKP 표준 스위치타입 실린더 단가표</h1>
-                                <p class="text-gray-400 mt-2">옵션을 선택하여 실시간으로 견적을 확인하세요. (기준일: 2025.08)</p>
+                                <p class="text-gray-400 mt-2">옵션을 선택하여 실시간으로 견적을 확인하세요. (기준일: 2025.08월)</p>
                             </header>
 
                              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -597,7 +601,7 @@
                         <div class="watermark">한국도키멕 기술연구소</div>
                         <div class="p-4 sm:p-6 lg:p-8">
                             <h1 class="text-2xl sm:text-3xl font-bold text-center calc-header mb-2 pt-16">TKP 박형 실린더 단가표</h1>
-                            <p class="text-gray-400 mt-2 mb-8 text-center">2025.08월 기준.</p>
+                            <p class="text-gray-400 mt-2 mb-8 text-center">2025.08월 기준</p>
                             
                              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                                 <div class="calc-panel p-6 sm:p-8 rounded-2xl shadow-inner">
@@ -650,7 +654,7 @@
     <div class="watermark">한국도키멕 기술연구소</div>
     <div class="p-4 sm:p-6 lg:p-8">
         <h1 class="text-2xl sm:text-3xl font-bold text-center calc-header mb-2 pt-16">TKP 펌프/밸브 단가표</h1>
-        <p class="text-center text-gray-400 mb-8">2025.07 기준 (TOKIMEC, WALVOIL, CASAPPA 등)</p>
+        <p class="text-center text-gray-400 mb-8">2025.07 기준 </p>
 
         <div class="calc-panel p-6 sm:p-8 rounded-2xl shadow-inner">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -700,56 +704,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 	// =======================================================
-// ▼▼▼▼▼▼▼▼▼▼ 비밀번호 기능 관련 코드 ▼▼▼▼▼▼▼▼▼▼
-// =======================================================
-const CORRECT_PASSWORD =['0011', '0012', '0013', `0454`];
 
-const passwordModal = document.getElementById('password-modal');
-const passwordForm = document.getElementById('password-form');
-const passwordInput = document.getElementById('password-input');
-const passwordError = document.getElementById('password-error');
-const mainContent = document.getElementById('main-content');
-const passwordCloseBtn = document.getElementById('password-close-btn');
-
-// 페이지가 로드되면 비밀번호 모달을 즉시 표시
-passwordModal.classList.add('show');
-
-// 비밀번호 입력 폼 제출 이벤트 처리
-passwordForm.addEventListener('submit', function(event) {
-    event.preventDefault(); // 폼의 기본 제출 동작(새로고침)을 막습니다.
-
-    if (CORRECT_PASSWORD.includes(passwordInput.value)) {
-        // 비밀번호가 맞을 경우
-        passwordModal.classList.remove('show'); // 비밀번호 모달 숨기기
-        mainContent.style.display = 'block';    // 숨겨뒀던 메인 콘텐츠 보여주기
-        passwordError.textContent = '';         // 에러 메시지 초기화
-    } else {
-        // 비밀번호가 틀릴 경우
-        passwordError.textContent = '비밀번호가 일치하지 않습니다.'; // 에러 메시지 표시
-        passwordInput.value = ''; // 입력 필드 비우기
-
-        // 입력창을 살짝 흔드는 효과 추가
-        passwordModal.querySelector('.password-modal-content').animate([
-            { transform: 'translateX(0)' },
-            { transform: 'translateX(-10px)' },
-            { transform: 'translateX(10px)' },
-            { transform: 'translateX(-10px)' },
-            { transform: 'translateX(0)' }
-        ], {
-            duration: 300,
-            iterations: 1
-        });
-    }
-});
-
-// 닫기 버튼 클릭 시 (PWA 앱 종료 또는 창 닫기 시도)
-passwordCloseBtn.addEventListener('click', function() {
-    if (confirm('프로그램을 종료하시겠습니까?')) {
-        window.close();
-    }
-});
-// =======================================================
-// ▲▲▲▲▲▲▲▲▲▲ 비밀번호 기능 관련 코드 ▲▲▲▲▲▲▲▲▲▲
 // =======================================================
  // --- PWA 설치 버튼 관련 코드 ---
     const installButton = document.getElementById('install-pwa-btn');
@@ -1383,23 +1338,23 @@ const stdPriceData = {
             '100': {
                 '50': { 'C': 192400, 'B': 230200 },
                 '100': { 'C': 209100, 'B': 250100 },
-                '150': { 'C': 271100, 'B': 224900 }, // C, B 순서 주의
+                '150': { 'C': 224900, 'B': 271100 }, 
                 '200': { 'C': 241700, 'B': 302700 },
-                '250': { 'C': 310100, 'B': 258600 }, // C, B 순서 주의
+                '250': { 'C': 258600, 'B': 310100 }, 
                 '300': { 'C': 275300, 'B': 331100 },
                 '350': { 'C': 281900, 'B': 337600 },
                 '400': { 'C': 296100, 'B': 357700 },
-                '450': { 'C': 375900, 'B': 314200 }, // C, B 순서 주의
-                '500': { 'C': 396200, 'B': 328400 }, // C, B 순서 주의
-                '550': { 'C': 398700, 'B': 332700 }, // C, B 순서 주의
+                '450': { 'C': 314200, 'B': 375900 }, 
+                '500': { 'C': 328400, 'B': 396200 }, 
+                '550': { 'C': 332700, 'B': 398700 }, 
                 '600': { 'C': 347300, 'B': 418100 },
                 '650': { 'C': 362900, 'B': 433700 },
-                '700': { 'C': 455900, 'B': 378400 }, // C, B 순서 주의
-                '750': { 'C': 474400, 'B': 396700 }, // C, B 순서 주의
+                '700': { 'C': 378400, 'B': 455900 }, 
+                '750': { 'C': 396700, 'B': 474400 }, 
                 '800': { 'C': 409400, 'B': 491900 },
-                '850': { 'C': 513200, 'B': 424900 }, // C, B 순서 주의
-                '900': { 'C': 528700, 'B': 440400 }, // C, B 순서 주의
-                '950': { 'C': 455900, 'B': 550100 }, // C, B 순서 주의
+                '850': { 'C': 424900, 'B': 513200 }, 
+                '900': { 'C': 440400, 'B': 528700 }, 
+                '950': { 'C': 455900, 'B': 550100 }, 
                 '1000': { 'C': 471500, 'B': 567600 }
             },
             '125': {
@@ -1412,7 +1367,7 @@ const stdPriceData = {
                 '350': { 'C': 367380, 'B': 439020 },
                 '400': { 'C': 380160, 'B': 447930 },
                 '450': { 'C': 407610, 'B': 483300 },
-                '500': { 'C': 423360, 'B': 506000 },
+                '500': { 'C': 423360, 'B': 506880 },
                 '550': { 'C': 428400, 'B': 509850 },
                 '600': { 'C': 444500, 'B': 530640 },
                 '650': { 'C': 462510, 'B': 547650 },
@@ -1537,7 +1492,7 @@ const stdPriceData = {
             '250': {
                 '50': { 'C': 1529030, 'B': 1755980 },
                 '100': { 'C': 1612910, 'B': 1854880 },
-                '150': { 'C': 1695660, 'B': 1949500 }, // C, B 순서 주의
+                '150': { 'C': 1695660, 'B': 1949500 }, 
                 '200': { 'C': 1764360, 'B': 2030220 },
                 '250': { 'C': 1780680, 'B': 2046300 },
                 '300': { 'C': 1844820, 'B': 2119860 },
@@ -1545,7 +1500,7 @@ const stdPriceData = {
                 '400': { 'C': 1931220, 'B': 2221020 },
                 '450': { 'C': 2008890, 'B': 2308410 },
                 '500': { 'C': 2083500, 'B': 2395000 },
-                '550': { 'C': 2160180, 'B': 2481300 }, // C, B 순서 주의
+                '550': { 'C': 2160180, 'B': 2481300 }, 
                 '600': { 'C': 2236770, 'B': 2570670 },
                 '650': { 'C': 2301390, 'B': 2641950 },
                 '700': { 'C': 2313270, 'B': 2659140 },
@@ -3189,9 +3144,7 @@ if (floatingBtn) {
     
 });
 </script>
-<!-- ================================== -->
-    <!-- ▼▼▼▼▼▼▼▼▼▼ 계산 기록 패널(모달) ▼▼▼▼▼▼▼▼▼▼ -->
-    <!-- ================================== -->
+
     <div id="history-panel" class="hidden fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
         <div class="bg-gray-800 rounded-2xl shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col">
             <div class="p-6 border-b border-gray-700 flex justify-between items-center">
@@ -3208,9 +3161,7 @@ if (floatingBtn) {
             </div>
         </div>
     </div>
-    <!-- ================================== -->
-    <!-- ▲▲▲▲▲▲▲▲▲▲ 계산 기록 패널(모달) ▲▲▲▲▲▲▲▲▲▲ -->
-    <!-- ================================== -->
+    
  <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -3222,19 +3173,12 @@ if (floatingBtn) {
             });
         }
     </script>
-<div id="password-modal" class="password-modal-overlay">
-    <div class="password-modal-content">
-        <h2 class="text-2xl font-bold text-sky-400 text-center mb-4">비밀번호 입력</h2>
-        <p class="text-gray-400 text-center mb-6">계산기에 접근하려면 비밀번호를 입력하세요.</p>
-        <form id="password-form">
-            <input type="password" id="password-input" class="w-full text-center p-3 rounded-lg text-lg password-input" autocomplete="current-password">
-            <p id="password-error" class="text-red-400 text-center mt-2 password-error-message"></p>
-            <div class="mt-6 grid grid-cols-2 gap-4">
-                 <button type="button" id="password-close-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">닫기</button>
-                <button type="submit" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">확인</button>
-            </div>
-        </form>
-    </div>
-</div>
+
 
 </html>
+
+
+
+
+
+
